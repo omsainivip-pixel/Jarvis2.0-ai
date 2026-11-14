@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #07120f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  text-align: center;
+  padding: 25px 10px;
+  color: #42f5a1;
+}
+
+header h1 { font-size: 34px; }
+
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 15px;
+}
+
+#chat {
+  height: 330px;
+  overflow-y: auto;
+  background: #10231c;
+  border: 1px solid #276548;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.message {
+  padding: 12px;
+  margin: 9px 0;
+  border-radius: 10px;
+  white-space: pre-wrap;
+}
+
+.bot { background: #193d2d; }
+.user { background: #14583c; text-align: right; }
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1px solid #42f5a1;
+  background: #10231c;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  padding: 13px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: #42f5a1;
+  color: #062014;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#send { width: 100%; }
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.buttons button { flex: 1; }
+
+footer {
+  text-align: center;
+  color: #8ba99a;
+  padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div style="font-size:45px">🤖</div>
+  <h1>JARVIS AI</h1>
+  <p>Your Personal Assistant</p>
+</header>
+
+<main>
+
+<div id="chat">
+  <div class="message bot">
+    JARVIS: Hello! I am online. How can I help you?
+  </div>
+</div>
+
+<input id="question"
+placeholder="Ask JARVIS something..."
+onkeydown="if(event.key==='Enter') sendMessage()">
+
+<button id="send" onclick="sendMessage()">SEND ➤</button>
+
+<div class="buttons">
+  <button onclick="quick('joke')">😂 JOKE</button>
+  <button onclick="quick('artist')">🎨 ARTIST</button>
+  <button onclick="quick('help')">❓ HELP</button>
+</div>
+
+<button style="width:100%;background:#25D366;color:white"
+onclick="shareWhatsApp()">
+📱 SHARE ON WHATSAPP
+</button>
+
+</main>
+
+<footer>JARVIS AI • Free Basic Edition</footer>
+
+<script>
+const chat = document.getElementById("chat");
+
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = "message " + type;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function reply(text) {
+  let q = text.toLowerCase().trim();
+
+  if (q.includes("hello") || q.includes("hi")) {
+    return "Hello! JARVIS is online. How can I help?";
+  }
+
+  if (q.includes("joke")) {
+    const jokes = [
+      "Why did the computer go to the doctor? It had a virus!",
+      "Why was the maths book sad? It had too many problems!",
+      "Why do artists love pencils? They make a good point!"
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+  }
+
+  if (q.includes("artist") || q.includes("drawing")) {
+    const ideas = [
+      "Draw an anime character using pencil shading.",
+      "Draw a mountain landscape with charcoal.",
+      "Draw an eye with simple pencil shading.",
+      "Draw a fantasy village using perspective."
+    ];
+    return "🎨 Drawing idea: " +
+      ideas[Math.floor(Math.random() * ideas.length)];
+  }
+
+  if (q.includes("time")) {
+    return "Current time: " + new Date().toLocaleTimeString();
+  }
+
+  if (q.includes("date")) {
+    return "Today's date: " + new Date().toLocaleDateString();
+  }
+
+  if (q === "help") {
+    return "Try: hello, joke, artist, drawing, time, date, or 25 + 15.";
+  }
+
+  const match = q.match(/^(-?\d+(?:\.\d+)?)\s*([+\-*/])\s*(-?\d+(?:\.\d+)?)$/);
+
+  if (match) {
+    const a = Number(match[1]);
+    const b = Number(match[3]);
+    const op = match[2];
+
+    if (op === "/" && b === 0) {
+      return "Cannot divide by zero.";
+    }
+
+    const result =
+      op === "+" ? a + b :
+      op === "-" ? a - b :
+      op === "*" ? a * b : a / b;
+
+    return "The answer is " + result;
+  }
+
+  return "I am the free basic JARVIS version. Type HELP to see my features.";
+}
+
+function sendMessage() {
+  const input = document.getElementById("question");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage("You: " + text, "user");
+  addMessage("JARVIS: " + reply(text), "bot");
+
+  input.value = "";
+}
+
+function quick(text) {
+  document.getElementById("question").value = text;
+  sendMessage();
+}
+
+function shareWhatsApp() {
+  const url = location.href;
+  const text = "Try my JARVIS AI website: " + url;
+
+  window.open(
+    "https://wa.me/?text=" + encodeURIComponent(text),
+    "_blank"
+  );
+}
+</script>
+
+</body>
+  </html>
+  
